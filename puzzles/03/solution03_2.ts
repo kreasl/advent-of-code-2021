@@ -1,6 +1,7 @@
 import * as H from 'highland';
 import Stream = Highland.Stream;
-import { readFile, parseIntArray, array2Number } from '../helpers';
+import { parseIntArray, array2Number } from '../../helpers/arrays';
+import { output, readFile } from '../../helpers/streams';
 
 const filterArrays = async (
   cond: Function,
@@ -22,8 +23,6 @@ const filterArrays = async (
 };
 
 (async () => {
-  const output = process.stdout;
-
   const input = readFile('input.txt')
     .split().compact()
     .map((s) => s.split(''))
@@ -59,13 +58,12 @@ const filterArrays = async (
   const result1 = await filterSequence1(input1);
   const result0 = await filterSequence0(input0);
 
-  H([
+  const answer = H([
     result1.map(array2Number),
     result0.map(array2Number),
   ])
     .flatten()
-    .reduce1((a, b) => a * b)
-    .map(JSON.stringify)
-    .intersperse('\n')
-    .pipe(output);
+    .reduce1((a, b) => a * b);
+
+  output(answer);
 })();

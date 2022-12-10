@@ -1,9 +1,7 @@
-import * as H from 'highland';
-import { readFile, parseIntArray, sumsOfArrays, array2Number } from '../helpers';
+import { parseIntArray, sumsOfArrays, array2Number } from '../../helpers/arrays';
+import { output, readFile } from '../../helpers/streams';
 
-const output = process.stdout;
-
-readFile('input.txt')
+const answer = readFile('input.txt')
   .split().compact()
   .map((s) => s.split(''))
   .map(parseIntArray)
@@ -21,10 +19,6 @@ readFile('input.txt')
   })
   .map((vals) => vals.map((valArr) => array2Number(valArr, 2)))
   .flatten()
-  .reduce1((a, b) => a * b)
-  .map(JSON.stringify)
-  .intersperse('\n')
-  .pipe(output);
+  .reduce1((a, b) => a * b);
 
-// input.each(() => {});
-// input.map(JSON.stringify).intersperse('\n').pipe(output);
+output(answer);

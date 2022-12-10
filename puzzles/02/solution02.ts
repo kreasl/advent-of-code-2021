@@ -1,7 +1,4 @@
-import * as H from 'highland';
-import { readFile } from '../helpers';
-
-const output = process.stdout;
+import { output, readFile } from '../../helpers/streams';
 
 const parseCommand = (cmd) => {
   const [dir, val] = cmd.split(' ');
@@ -20,7 +17,7 @@ const parseCommand = (cmd) => {
   }
 }
 
-const input = readFile('input.txt')
+const answer = readFile('input.txt')
   .split()
   .compact()
   .map(parseCommand)
@@ -37,5 +34,4 @@ const input = readFile('input.txt')
   )
   .map(([x, y]) => x * y)
 
-// input.each(() => {});
-input.map(JSON.stringify).intersperse('\n').pipe(output);
+output(answer);

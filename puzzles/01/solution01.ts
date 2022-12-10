@@ -1,7 +1,5 @@
 import * as H from 'highland';
-import { readFile } from '../helpers';
-
-const output = process.stdout;
+import { output, readFile } from '../../helpers/streams';
 
 const input = readFile('input.txt')
   .split()
@@ -18,16 +16,15 @@ const sums = H([v1, v2, v3])
 const first = sums.observe();
 const second = sums.observe().drop(1);
 
-first
+const answer = first
   .zip(second)
   .filter((arr) => arr.every((x) => !isNaN(x)))
   .map(([s1, s2]) => s2 - s1)
   .filter((diff) => diff > 0)
   .collect()
-  .map((arr) => arr.length)
-  .map(JSON.stringify)
-  .intersperse('\n')
-  .pipe(output);
+  .map((arr) => arr.length);
+
+output(answer);
 
 input.each(() => {});
 sums.each(() => {});
