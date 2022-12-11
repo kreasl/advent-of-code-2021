@@ -117,29 +117,23 @@ export const getTuples = <T>(stream: Stream<T>, size: number): Stream<Array<T>> 
 
 export const batchWithHead = <T>(stream: Stream<T>, condition: Function): Stream<T[]> => {
   let acc: T[] = [];
+  let count = 0;
 
   return stream.consume((err, x, push, next) => {
     if (H.isNil(x)) {
       if (acc.length) push(null, acc);
-
       push(null, H.nil);
-
       return;
     }
 
     if (!condition(x)) {
       acc.push(x);
-
-      next();
-
-      return;
+    } else {
+      if (acc.length) push(null, acc);
+      acc = [x];
     }
 
-    if (acc.length) {
-      push(null, acc);
-    }
-
-    acc = [x];
+    count++;
 
     next();
   });
