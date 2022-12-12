@@ -1,3 +1,5 @@
+import { Dot, PowerDot, Table } from './interface';
+
 export const parseIntArray = (arr: string[]) => arr.map((s) => parseInt(s));
 
 export const calculateArraySum = (arr: number[]) => arr.reduce((a, b) => a + b, 0);
@@ -60,4 +62,32 @@ export const array2Number = (arr, base = 2) => {
   );
 
   return num;
+}
+
+export const getNeighbors = <T>(t: Table<T>, { x, y }: Dot, diagonal: boolean = false): Dot[] => {
+  const neighbors = [
+    { x: x - 1, y, val: t[y][x - 1] },
+    { x: x + 1, y, val: t[y][x + 1] },
+    { x, y: y -1, val: (t[y - 1] || [])[x] },
+    { x, y: y + 1, val: (t[y + 1] || [])[x] },
+  ];
+
+  const alsoNeighbors = diagonal
+    ? [
+      { x: x - 1, y: y - 1, val: (t[y - 1] || [])[x - 1] },
+      { x: x - 1, y: y + 1, val: (t[y + 1] || [])[x - 1] },
+      { x: x + 1, y: y - 1, val: (t[y - 1] || [])[x + 1] },
+      { x: x + 1, y: y + 1, val: (t[y + 1] || [])[x + 1] },
+    ]
+    : [];
+
+  return [...neighbors, ...alsoNeighbors]
+    .filter(({ val }) => val !== undefined);
+}
+
+export const getPowerDots = (t: Table<number>): PowerDot[] => {
+  return t.map((line, y) => {
+    return line.map((power, x) => ({ x, y, power }))
+  })
+    .flat();
 }

@@ -31,7 +31,7 @@ export const draw = (stream: Stream<number | Dot | PowerDot>, width: number, hei
         const d = p as Dot;
 
         const pos = d.y * width + d.x + 1
-        const char = p.hasOwnProperty('strength') ? `${(p as PowerDot).power}` : NON_EMPTY;
+        const char = p.hasOwnProperty('power') ? `${(p as PowerDot).power}` : NON_EMPTY;
 
         return { pos, char };
       }
@@ -47,7 +47,7 @@ export const draw = (stream: Stream<number | Dot | PowerDot>, width: number, hei
 
       return (err, smb, push, next) => {
         if (H.isNil(smb)) {
-          push(null, Array(size - pos - 1).fill(EMPTY));
+          if (pos < size) push(null, Array(size - pos - 1).fill(EMPTY));
           push(null, H.nil);
           return;
         }

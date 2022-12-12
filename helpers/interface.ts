@@ -31,3 +31,5 @@ export interface Smb {
   pos: number;
   char: string;
 }
+
+export type Table<T> = T[][];
